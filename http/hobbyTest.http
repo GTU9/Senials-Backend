@@ -1,0 +1,63 @@
+###취미 게시판 전체 보기
+GET http://localhost:8081/hobby-board
+
+###취미 이미지 조회
+GET http://localhost:8081/img/hobbyboard/1
+
+###취미 게시판 인기 취미 조회
+GET http://localhost:8080/hobby-board/top3
+
+###취미 게시판 상세 보기, 관련된 후기 가져오기
+GET http://localhost:8081/hobby-detail/1
+
+###취미 게시판 카테고리별 전체보기
+GET http://localhost:8081/hobby-board/3
+
+###취미 게시판 후기 조회
+GET http://localhost:8081/1/hobby-review/11
+
+###취미 게시판 후기 작성
+POST http://localhost:8081/1/hobby-review
+Content-Type: application/json;charset=UTF-8
+
+{
+  "hobbyReviewRate": 4,
+  "hobbyReviewDetail": "데이터 작성 테스트",
+  "hobbyReviewHealthStatus": 1,
+  "hobbyReviewTendency": 1,
+  "hobbyReviewLevel": 3,
+  "hobbyReviewBudget": 2,
+  "hobbyReviewWriteDate": "2024-12-13T18:45:06"
+}
+
+###취미 게시판 후기 삭제
+DELETE http://localhost:8081/1/hobby-review/13
+
+###취미 게시판 후기 수정
+PUT http://localhost:8081/1/hobby-review/13
+Content-Type: application/json;charset=UTF-8
+
+{
+  "hobbyReviewRate": 2,
+  "hobbyReviewDetail": "이게무야",
+  "hobbyReviewHealthStatus": 3,
+  "hobbyReviewTendency": 2,
+  "hobbyReviewLevel": 1,
+  "hobbyReviewWriteDate": "2024-12-13T18:45:06"
+}
+
+###맞춤형 취미 추천 결과 조회
+GET http://localhost:8081/suggest-hobby-result?hobbyAbility=0&hobbyBudget=2&hobbyLevel=1&hobbyTendency=0
+
+###맞춤형 취미 추천 나의 취미 등록
+POST  http://localhost:8081/suggest-hobby-result?hobbyNumber=3
+
+###맞춤형 취미 추천 관련 모임 조회
+GET http://localhost:8081/partyboards/search/1
+
+###키워드 검색후 취미 결과 조회 + 페이지네이션
+GET http://localhost:8081/search-whole/hobby?keyword=&page=0&size=4
+
+
+###
+GET http://localhost:8080/hobbyreviews/1

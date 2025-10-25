@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>File Upload</h1>
+
+    <h3>single file upload</h3>
+
+    <h3>multi file upload</h3>
+    글 작성<br>
+    <form action="/partyboards" method="post">
+        유저번호
+        <input type="text" name="userNumber" value="1"/><br>
+        취미번호
+        <input type="text" name="hobbyNumber" value="2"><br>
+        이름
+        <input type="text" name="partyBoardName" value="testname"><br>
+        내용
+        <input type="text" name="partyBoardDetail" value="testDetail"><br>
+
+        이미지 임시 저장 번호
+        <input type="text" name="tempNumber"><br>
+        파일명
+        <input type="text" name="savedFiles">
+        <input type="text" name="savedFiles">
+
+        <input type="submit" value="File Upload">
+    </form>
+    <br><br>
+    글 수정 <br>
+    <form th:action="@{/partyboards/18}" th:method="put">
+        현재 글 번호 17 <br>
+        취미번호
+        <input type="text" name="hobbyNumber" value="2"><br>
+        이름
+        <input type="text" name="partyBoardName" value="modifyName"><br>
+        내용
+        <input type="text" name="partyBoardDetail" value="modifyDetail"><br>
+        모임 상태
+        <input type="text" name="partyBoardStatus" value="1"><br>
+
+        삭제 파일 번호
+        <input type="text" name="removedFileNumbers">
+        <input type="text" name="removedFileNumbers">
+        <br>
+
+        추가 파일명
+        <input type="text" name="addedFiles">
+        <input type="text" name="addedFiles">
+
+
+
+        <input type="submit" value="File Upload">
+
+    </form>
+
+
+</body>
+</html>

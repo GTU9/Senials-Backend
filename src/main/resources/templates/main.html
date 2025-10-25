@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>File Upload</h1>
+
+    <h3>single file upload</h3>
+
+    <h3>multi file upload</h3>
+    <form action="/partyboardimages" method="post" enctype="multipart/form-data">
+        파일 : <input type="file" name="multiFiles" multiple><br>
+        <input type="submit" value="File Upload">
+
+    </form>
+    <br><br><br>
+
+    <form action="#" th:action="@{/partyboardimages-temp}" method="#" th:method="put" enctype="multipart/form-data">
+        파일 : <input type="file" name="addedFiles" multiple><br>
+        파티번호
+        <input type="text" name="partyBoardNumber" value="17"><br>
+        <input type="submit" value="File Upload">
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,22 @@
+### 관심사 추가
+POST http://localhost:8080/users/1/favorites
+Content-Type: application/json
+
+{
+  "hobbyNumber": 2
+}
+
+### 관심사 조회
+GET http://localhost:8080/users/1/favorites
+
+### 관심사 수정
+PUT http://localhost:8080/users/1/favorites
+Content-Type: application/json
+
+[
+  1,3
+]
+
+### 관심사 삭제
+DELETE http://localhost:8080/users/1/favorites/1
+

@@ -1,0 +1,48 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+
+### 모임 내 일정 전체 조회
+GET http://localhost:8080/partyboards/1/meets
+
+### 모임 일정 추가
+POST http://localhost:8080/partyboards/2/meets
+Content-Type: application/json;charset=UTF-8
+
+{
+  "partyBoardNumber": 2,
+  "meetStartDate": "2030-12-15",
+  "meetEndDate": "2030-01-15",
+  "meetStartTime": "14:00",
+  "meetFinishTime": "14:30",
+  "meetEntryFee": 5555,
+  "meetLocation": "testLocationTest",
+  "meetMaxMember": 555
+}
+
+
+### 모임 일정 수정
+PUT http://localhost:8080/partyboards/2/meets/8
+Content-Type: application/json;charset=UTF-8
+
+{
+  "meetStartDate": "2024-12-31",
+  "meetEndDate": "2025-01-11",
+  "meetStartTime": "12:01",
+  "meetFinishTime": "14:01",
+  "meetEntryFee": 12345,
+  "meetLocation": "testLocation변경1",
+  "meetMaxMember": 123
+}
+
+### 모임 일정 삭제
+DELETE http://localhost:8080/partyboards/2/meets/7
+
+
+### 모임 일정 참여멤버 조회
+GET http://localhost:8080/partyboards/1/meets/1/meetmembers
+
+
+###
+GET http://localhost:8080/meets/3

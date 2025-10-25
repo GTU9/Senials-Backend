@@ -1,0 +1,58 @@
+### 모든 유저 조회
+GET http://localhost:8080/users
+
+
+### 유저 조회
+GET http://localhost:8080/users/1
+
+### 유저 탈퇴
+DELETE http://localhost:8080/users/4
+
+
+
+### 유저 프로필 변경
+### 닉네임만 수정 요청
+PUT http://localhost:8080/users/1/modify
+Content-Type: application/json
+
+{
+  "userNickname": "쿼카2",
+  "userDetail": null
+}
+### 한 줄 소개만 수정 요청
+PUT http://localhost:8080/users/1/modify
+Content-Type: application/json
+
+{
+  "userNickname": null,
+  "userDetail": "안녕하세요 쿼카입니다2"
+}
+
+### 닉네임과 한 줄 소개 모두 수정 요청
+PUT http://localhost:8080/users/1/modify
+Content-Type: application/json
+
+{
+  "userNickname": "귀여운 쿼카3",
+  "userDetail": "귀여운 쿼카입니다3"
+}
+
+### 사용자 프로필 수정
+PUT http://localhost:8080/users/1/modify
+Content-Type: application/json
+
+{
+  "userNickname": "새 닉네임",
+  "userDetail": "새 사용자 상세 정보",
+  "userProfileImg": "https://example.com/new-profile-image.jpg"
+}
+
+### 사용자가 참여한 모임 개수 출력
+GET http://localhost:8080/users/1/parties/count
+
+### 사용자가 만든 모임 개수 출력
+GET http://localhost:8080/users/1/made/count
+
+### 사용자가 좋아한 모임 개수 출력
+GET http://localhost:8080/users/1/like/count
+

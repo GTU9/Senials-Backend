@@ -1,0 +1,14 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+
+### 모임 멤버 전체 조회
+GET http://localhost:8080/partyboards/3/partymembers-page
+
+
+### 모임 참가
+POST http://localhost:8080/partyboards/5/partymembers
+
+### 모임 탈퇴
+DELETE http://localhost:8080/partyboards/5/partymembers
