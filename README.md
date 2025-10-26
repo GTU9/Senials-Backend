@@ -1,6 +1,6 @@
 # 시니얼
 
-![image](https://github.com/user-attachments/assets/5acc378b-fd0c-4832-87d8-d4e1cf62f84c)
+![image](etc/img/senial_logo.png)
 
 <br>
 
@@ -49,12 +49,12 @@
 <br><br><br>
 
 ## 🗓️개발 과정 타임라인
-![image](https://github.com/user-attachments/assets/7a0e7404-0342-4155-ad89-6913f146e83c)
+![image](etc/img/senial_wbs.png)
 
 <br><br><br>
 
 ## 💻개발환경
-<img src="https://github.com/WebAppTeamPJ/HanulDure/assets/105586878/0000951f-3a2c-42c2-a902-fe930149d968" height=500 width=500>
+<img src="etc/img/senial_stacks.png" height=500 width=500>
 
 <br>
   
@@ -67,7 +67,7 @@
 
 ## 🌳브랜치 전략
 ### _Trunk-based_
-![image](https://github.com/user-attachments/assets/57eebe55-fd12-40ed-af06-51f5456548df)
+![image](etc/img/senial_branch_rules.png)
 
 - main 브랜치와 feature 개인 브랜치로 나눠서 운용
 - **main** 브랜치는 배포 단계에서만 사용하는 브랜치
@@ -79,8 +79,8 @@
 <br>
 
 ## 📌ERD
-![image](https://github.com/user-attachments/assets/25802fab-a94c-42d2-82f0-63b3d20eba8d)
-![image](https://github.com/user-attachments/assets/f2cf3eac-1855-4133-a5ea-1013ec7df807)
+![image](etc/img/senial_erd1.png)
+![image](etc/img/senial_erd2.png)
 
 
 <br>
