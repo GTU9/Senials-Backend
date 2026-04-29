@@ -113,7 +113,7 @@ public class LikesController {
 
         Integer userNumber = null;
         Integer code = 2;
-        if(token != null) {
+        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
             userNumber = tokenParser.extractUserNumberFromToken(token);
             code = likesService.toggleLike(userNumber, partyBoardNumber);
         }

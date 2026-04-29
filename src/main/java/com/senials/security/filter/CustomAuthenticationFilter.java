@@ -130,10 +130,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             response.addHeader("Authorization", "Bearer " + token);
             System.out.println("생성된 JWT: " + token); // JWT 로그 출력
 
-            // JSON 응답 작성
+            // JSON 응답 작성 (프론트·도구가 읽을 수 있도록 본문에 JWT 포함; 헤더는 기존과 동일 유지)
+            JSONObject body = new JSONObject();
+            body.put("message", "인증이 성공했습니다.");
+            body.put("username", username);
+            body.put("token", token);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"message\":\"인증이 성공했습니다.\", \"username\":\"" + username + "\"}");
+            response.getWriter().write(body.toJSONString());
             response.setStatus(HttpServletResponse.SC_OK); // HTTP 200 상태 코드
         } catch (Exception e) {
             e.printStackTrace(); // 에러 로그 출력

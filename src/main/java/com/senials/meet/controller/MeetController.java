@@ -79,7 +79,7 @@ public class MeetController {
 
     ) {
         Integer userNumber = null;
-        if(token != null) {
+        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
             userNumber  = tokenParser.extractUserNumberFromToken(token);
         }
 
