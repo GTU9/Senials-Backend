@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+// 테스트 단계 - 카카오 로그인 비활성화
+//import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import java.io.IOException;
@@ -21,11 +22,12 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
 
         // 오류 메시지 작성
         Map<String, String> errorResponse = new HashMap<>();
-        if (exception instanceof OAuth2AuthenticationException) {
-            errorResponse.put("error", "OAuth2 인증 오류: " + exception.getMessage());
-        } else {
-            errorResponse.put("error", "인증 실패: " + exception.getMessage());
-        }
+        // 테스트 단계 - 카카오 로그인 비활성화
+        // if (exception instanceof OAuth2AuthenticationException) {
+        //     errorResponse.put("error", "OAuth2 인증 오류: " + exception.getMessage());
+        // } else {
+        errorResponse.put("error", "인증 실패: " + exception.getMessage());
+        // }
         // JSON으로 응답
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(errorResponse));

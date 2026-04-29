@@ -64,7 +64,7 @@ public class PartyBoardController {
             , @RequestHeader(required = false, value = "Authorization") String token
     ) {
         Integer userNumber = null;
-        if(token != null) {
+        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
             userNumber = tokenParser.extractUserNumberFromToken(token);
         }
 
@@ -115,7 +115,7 @@ public class PartyBoardController {
     )
     {
         Integer userNumber = null;
-        if(token != null) {
+        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
             userNumber = tokenParser.extractUserNumberFromToken(token);
         }
 
@@ -161,7 +161,7 @@ public class PartyBoardController {
     ) {
 
         Integer userNumber = null;
-        if(token != null) {
+        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
             userNumber = tokenParser.extractUserNumberFromToken(token);
         }
 

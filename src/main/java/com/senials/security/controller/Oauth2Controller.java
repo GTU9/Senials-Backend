@@ -4,7 +4,7 @@ import com.senials.common.ResponseMessage;
 import com.senials.config.HttpHeadersFactory;
 import com.senials.security.domain.kakao.auth.PrincipalDetails;
 import com.senials.security.repository.SecurityUserRepository;
-import com.senials.security.service.PrincipalOauth2UserService;
+//import com.senials.security.service.PrincipalOauth2UserService;
 import com.senials.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -19,13 +19,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+//import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.senials.security.service.OAuth2Service;
-import com.senials.security.service.JwtService;
+//import com.senials.security.service.OAuth2Service;
+//import com.senials.security.service.JwtService;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -42,13 +42,13 @@ public class Oauth2Controller {
     private AuthenticationManager authenticationManager;
     @Autowired
     private HttpHeadersFactory httpHeadersFactory;
-    @Autowired
-    private OAuth2Service oAuth2Service;
-    @Autowired
-    private JwtService jwtService;
+//    @Autowired
+//    private OAuth2Service oAuth2Service;
+//    @Autowired
+//    private JwtService jwtService;
 
 
-    public Oauth2Controller(SecurityUserRepository userRepository, PasswordEncoder passwordEncoder, PrincipalOauth2UserService principalOauth2UserService, HttpSession httpSession) {
+    public Oauth2Controller(SecurityUserRepository userRepository, PasswordEncoder passwordEncoder, /*PrincipalOauth2UserService principalOauth2UserService,*/ HttpSession httpSession) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.httpSession = httpSession;
@@ -75,14 +75,16 @@ public class Oauth2Controller {
 
     @GetMapping("/oauth/loginInfo")
     @ResponseBody
-    public String oauthLoginInfo(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2UserPrincipal) {
+    public String oauthLoginInfo(Authentication authentication/*, @AuthenticationPrincipal OAuth2User oAuth2UserPrincipal*/) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "사용자가 인증되지 않았습니다.";
         }
 
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        return attributes.toString();
+        // 테스트 단계 - 카카오 OAuth2 비활성화
+        // OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        // Map<String, Object> attributes = oAuth2User.getAttributes();
+        // return attributes.toString();
+        return "OAuth2 비활성화 중";
     }
 
     @PostMapping("/join")
@@ -140,11 +142,12 @@ public class Oauth2Controller {
         return "OAuth2 로그인 : " + principal;
     }
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String clientId; // 카카오 클라이언트 ID
+    // 테스트 단계 - 카카오 로그인 비활성화
+    // @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String clientId = "disabled";
 
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String redirectUri; // 카카오 리디렉션 URI
+    // @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String redirectUri = "disabled";
 
     @GetMapping("/api/init-kakao-login")
     public ResponseEntity<Map<String, String>> initKakaoLogin() {

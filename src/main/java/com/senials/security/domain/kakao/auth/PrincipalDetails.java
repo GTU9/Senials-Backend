@@ -4,13 +4,15 @@ import com.senials.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+// 테스트 단계 - 카카오 로그인 비활성화
+//import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class PrincipalDetails implements UserDetails, OAuth2User {
+// 테스트 단계 - OAuth2User 구현 제거 (카카오 로그인 비활성화)
+public class PrincipalDetails implements UserDetails/*, OAuth2User*/ {
     private User user;
     private Oauth2UserInfo oauth2UserInfo;
 
@@ -29,7 +31,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return user;
     }
 
-    @Override
+    // 테스트 단계 - OAuth2User 메서드 비활성화
+    //@Override
     public Map<String, Object> getAttributes() {
         return this.oauth2UserInfo.getAttributes();
     }
@@ -72,8 +75,9 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
-    @Override
+    // 테스트 단계 - OAuth2User 메서드 비활성화
+    //@Override
     public String getName() {
-        return oauth2UserInfo.getAttributes().get("sub").toString();
+        return oauth2UserInfo != null ? oauth2UserInfo.getAttributes().get("sub").toString() : null;
     }
 }

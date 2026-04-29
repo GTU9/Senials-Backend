@@ -1,10 +1,14 @@
 package com.senials.security.filter;
 
-import com.nimbusds.jose.shaded.gson.JsonObject;
-import com.nimbusds.jose.shaded.gson.JsonParser;
+// com.nimbusds는 oauth2-client 의존성 제거로 인해 json-simple로 교체
+//import com.nimbusds.jose.shaded.gson.JsonObject;
+//import com.nimbusds.jose.shaded.gson.JsonParser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import com.senials.security.repository.SecurityUserRepository;
 import com.senials.security.service.JwtService;
-import com.senials.security.service.OAuth2Service;
+//import com.senials.security.service.OAuth2Service;
 import com.senials.user.entity.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,13 +33,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final OAuth2Service oAuth2Service; // OAuth2Service 추가
+//    private final OAuth2Service oAuth2Service; // OAuth2Service 추가
     private final SecurityUserRepository userRepository; // UserRepository 추가
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService, OAuth2Service oAuth2Service, SecurityUserRepository securityUserRepository) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtService jwtService, /*OAuth2Service oAuth2Service,*/ SecurityUserRepository securityUserRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-        this.oAuth2Service = oAuth2Service; // OAuth2Service 초기화
+//        this.oAuth2Service = oAuth2Service; // OAuth2Service 초기화
         this.userRepository = securityUserRepository; // UserRepository 초기화
     }
 
@@ -63,11 +67,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             // JSON 파싱
             String json = sb.toString();
             System.out.println("Received JSON: " + json); // JSON 요청 로그
-            JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
 
-            // 사용자 이름과 비밀번호 추출
-            username = jsonObject.get("userName").getAsString();
-            password = jsonObject.get("userPwd").getAsString();
+            try {
+                JSONParser parser = new JSONParser();
+                JSONObject jsonObject = (JSONObject) parser.parse(json);
+
+                // 사용자 이름과 비밀번호 추출
+                username = (String) jsonObject.get("userName");
+                password = (String) jsonObject.get("userPwd");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             // 추출된 사용자 이름과 비밀번호 로그
             System.out.println("Parsed username: " + username);
@@ -117,14 +127,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
             // JWT 생성 시 추가 정보 포함
             String token = jwtService.generateToken(user, roles);
-
             response.addHeader("Authorization", "Bearer " + token);
             System.out.println("생성된 JWT: " + token); // JWT 로그 출력
 
             // JSON 응답 작성
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"message\":\"인증이 성공했습니다.\", \"token\":\"" + token + "\"}");
+            response.getWriter().write("{\"message\":\"인증이 성공했습니다.\", \"username\":\"" + username + "\"}");
             response.setStatus(HttpServletResponse.SC_OK); // HTTP 200 상태 코드
         } catch (Exception e) {
             e.printStackTrace(); // 에러 로그 출력
