@@ -128,7 +128,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             // JWT 생성 시 추가 정보 포함
             String token = jwtService.generateToken(user, roles);
             response.addHeader("Authorization", "Bearer " + token);
-            System.out.println("생성된 JWT: " + token); // JWT 로그 출력
 
             // JSON 응답 작성 (프론트·도구가 읽을 수 있도록 본문에 JWT 포함; 헤더는 기존과 동일 유지)
             JSONObject body = new JSONObject();

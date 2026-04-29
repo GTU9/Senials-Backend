@@ -79,8 +79,12 @@ public class HobbyService {
             return dto;
         }).toList();
 
-        hobbyDTOList=hobbyDTOList.stream().filter(hobbyDTO->hobbyDTO.getReviewCount()>=minimumReviewCount)
-                .sorted(Comparator.comparing(HobbyDTO::getRating).reversed())
+        // 평점 동률: 리뷰 수 많은 순 → 그래도 같으면 취미 번호 오름차순(결과 고정)
+        hobbyDTOList = hobbyDTOList.stream()
+                .filter(hobbyDTO -> hobbyDTO.getReviewCount() >= minimumReviewCount)
+                .sorted(Comparator.comparingDouble(HobbyDTO::getRating).reversed()
+                        .thenComparingInt(HobbyDTO::getReviewCount).reversed()
+                        .thenComparingInt(HobbyDTO::getHobbyNumber))
                 .limit(limit)
                 .collect(Collectors.toList());
 

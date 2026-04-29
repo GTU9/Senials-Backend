@@ -82,7 +82,6 @@ public class LikesController {
     public ResponseEntity<ResponseMessage> countUserLikeParties(
             @RequestHeader("Authorization") String token
     ) {
-        System.out.println("token : " + token);
         int userNumber = extractUserNumberFromToken(token);
         long count = likesService.countLikesPartyBoardsByUserNumber(userNumber);
 
