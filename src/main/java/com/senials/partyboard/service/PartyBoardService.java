@@ -19,6 +19,7 @@ import com.senials.partyreview.repository.PartyReviewRepository;
 import com.senials.user.entity.User;
 import com.senials.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,12 @@ import java.util.stream.Collectors;
 @Service
 public class PartyBoardService {
 
-    private final String partyImagePath = "src/main/resources/static/img/party_board";
+    @Value("${upload.path}")
+    private String uploadPath;
+
+    private String getPartyImagePath() {
+        return uploadPath + "/party_board";
+    }
 
     private final PartyBoardMapper partyBoardMapper;
 
@@ -313,27 +319,15 @@ public class PartyBoardService {
 
 
         // 4. 이미지 저장
-        Resource resource = resourceLoader.getResource("classpath:static/img/party_board/" + partyBoardNumber + "/thumbnail");
-
-        /* 파일 경로 지정 (없으면 디렉터리 생성) */
-        String filePath = null;
-        try {
-            if (!resource.exists()) {
-
-                String root = partyImagePath + "/" + partyBoardNumber + "/thumbnail";
-                File file = new File(root);
-
-                if( !file.mkdirs() ) {
-                    throw new IOException();
-                }
-                filePath = file.getAbsolutePath();
-
-            } else {
-                filePath = resource.getFile().getAbsolutePath();
+        String partyImagePath = getPartyImagePath();
+        String thumbnailPath = partyImagePath + "/" + partyBoardNumber + "/thumbnail";
+        File thumbnailDir = new File(thumbnailPath);
+        if (!thumbnailDir.exists()) {
+            if (!thumbnailDir.mkdirs()) {
+                throw new RuntimeException("이미지 저장 실패");
             }
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 저장 실패");
         }
+        String filePath = thumbnailDir.getAbsolutePath();
 
 
         /* 파일 실제 저장 */
@@ -395,27 +389,12 @@ public class PartyBoardService {
 
 
         // 4. 이미지 저장
-        String imgBoardPath = partyImagePath + "/" + partyBoardNumber + "/thumbnail";
-        Resource resource = resourceLoader.getResource("classpath:static/img/party_board/" + partyBoardNumber + "/thumbnail");
-
-        /* 파일 경로 지정 (없으면 디렉터리 생성) */
-        String filePath = null;
-        try {
-            if (!resource.exists()) {
-
-                File file = new File(imgBoardPath);
-
-                if( !file.mkdirs() ) {
-                    throw new IOException();
-                }
-                filePath = file.getAbsolutePath();
-
-            } else {
-                filePath = resource.getFile().getAbsolutePath();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 저장 실패");
+        String imgBoardPath = getPartyImagePath() + "/" + partyBoardNumber + "/thumbnail";
+        File thumbnailDir = new File(imgBoardPath);
+        if (!thumbnailDir.exists()) {
+            thumbnailDir.mkdirs();
         }
+        String filePath = thumbnailDir.getAbsolutePath();
 
 
         /* 파일 실제 저장 */
@@ -475,31 +454,13 @@ public class PartyBoardService {
                 throw new IllegalArgumentException("잘못된 요청입니다.");
             } else {
 
-                String imgBoardPath = partyImagePath + "/" + partyBoardNumber + "/thumbnail";
-                Resource resource = resourceLoader.getResource("classpath:static/img/party_board/" + partyBoardNumber + "/thumbnail");
-
-                /* 파일 경로 지정 (없으면 디렉터리 생성) */
-                String filePath = null;
-                try {
-                    if (!resource.exists()) {
-
-                        File file = new File(imgBoardPath);
-
-                        if( !file.mkdirs() ) {
-                            throw new IOException();
-                        }
-                        filePath = file.getAbsolutePath();
-
-                    } else {
-                        filePath = resource.getFile().getAbsolutePath();
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException("글 삭제 실패");
-                }
+                String imgBoardPath = getPartyImagePath() + "/" + partyBoardNumber + "/thumbnail";
 
                 File[] deletedFiles = new File(imgBoardPath).listFiles();
-                for(File deletedFile : deletedFiles) {
-                    deletedFile.delete();
+                if (deletedFiles != null) {
+                    for (File deletedFile : deletedFiles) {
+                        deletedFile.delete();
+                    }
                 }
 
                 partyBoardRepository.deleteById(partyBoardNumber);

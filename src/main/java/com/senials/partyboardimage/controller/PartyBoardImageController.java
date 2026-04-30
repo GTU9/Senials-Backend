@@ -3,6 +3,7 @@ package com.senials.partyboardimage.controller;
 import com.senials.common.ResponseMessage;
 import com.senials.partyboardimage.dto.FileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +24,8 @@ import java.util.stream.Stream;
 @RestController
 public class PartyBoardImageController {
 
-    private final String imgPath = "classpath:static/img";
+    @Value("${upload.path}")
+    private String uploadPath;
 
     private final ResourceLoader resourceLoader;
 
@@ -43,20 +45,14 @@ public class PartyBoardImageController {
             @RequestParam List<MultipartFile> addedFiles
     ) throws IOException {
 
-        String root = System.getProperty("user.dir") + "/src/main/resources/static" + "/img/party_board/" + partyBoardNumber + "/thumbnail";
+        String root = uploadPath + "/party_board/" + partyBoardNumber + "/thumbnail";
         String filePath = null;
         File fileDir = new File(root);
 
         if (!fileDir.exists()) {
-
             fileDir.mkdirs();
-            filePath = fileDir.getAbsolutePath();
-
-        } else {
-
-            filePath = fileDir.getAbsolutePath();
-
         }
+        filePath = fileDir.getAbsolutePath();
 
         Map<String, Object> responseMap = new HashMap<>();
 
@@ -105,20 +101,18 @@ public class PartyBoardImageController {
             @PathVariable Integer partyBoardNumber
             ,@PathVariable String imageName
     ) {
-
-        Resource resource = resourceLoader.getResource("classpath:static/img/party_board/" + partyBoardNumber + "/thumbnail/" + imageName);
+        String filePath = uploadPath + "/party_board/" + partyBoardNumber + "/thumbnail/" + imageName;
+        Resource resource = resourceLoader.getResource("file:" + filePath);
 
         if(resource.exists()) {
-            String contentType = "image/png"; // 기본 MIME 타입 설정
+            String contentType = "image/png";
             if (resource.getFilename().endsWith(".jpg") || resource.getFilename().endsWith(".jpeg")) {
                 contentType = "image/jpeg";
             }
             return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(resource);
-
         } else {
             return ResponseEntity.notFound().build();
         }
-
     }
 
 

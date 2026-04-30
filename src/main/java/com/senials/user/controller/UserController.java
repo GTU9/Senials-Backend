@@ -186,27 +186,24 @@ public class UserController {
     ){
         try{
             UserCommonDTO foundUser = userService.getUserByNumber(userNumber);
-
-            Resource resource = resourceLoader.getResource("classpath:static/img/user_profile/" + foundUser.getUserProfileImg());
+            String filePath = uploadPath + "/user_profile/" + foundUser.getUserProfileImg();
+            Resource resource = resourceLoader.getResource("file:" + filePath);
 
             if (resource.exists()){
-                String contentType = "image/png";//기본 MIME 타입 설정
-
+                String contentType = "image/png";
                 if(resource.getFilename().endsWith("jpg") || resource.getFilename().endsWith("jpeg")){
                     contentType = "image/jpeg";
                 }
-
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType(contentType))
                         .body(resource);
-
             }else {
-                resource = resourceLoader.getResource("classpath:static/img/user_profile/defaultProfile.png");
-                return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(resource);
+                Resource defaultResource = resourceLoader.getResource("classpath:static/img/user_profile/defaultProfile.png");
+                return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(defaultResource);
             }
         }catch (Exception e){
-            Resource resource = resourceLoader.getResource("classpath:static/img/user_profile/defaultProfile.png");
-            return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(resource);
+            Resource defaultResource = resourceLoader.getResource("classpath:static/img/user_profile/defaultProfile.png");
+            return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(defaultResource);
         }
     }
 
@@ -232,27 +229,20 @@ public class UserController {
 
         try {
             // 기존 이미지 삭제
-            Resource resource = resourceLoader.getResource("classpath:static/img/user_profile");
-            String filePath = null;
-            if(resource.exists()) {
-                filePath = resource.getFile().getAbsolutePath();
-            } else {
-                File newDir = new File("src/main/resources/static/img/user_profile");
-                if(!newDir.mkdir()) {
-                    throw new IOException("이미지 저장 실패");
-                } else {
-                    filePath = newDir.getAbsolutePath();
-                }
+            String userProfileDir = uploadPath + "/user_profile";
+            File profileDir = new File(userProfileDir);
+            if (!profileDir.exists()) {
+                profileDir.mkdirs();
             }
 
-            File prevFile = new File("src/main/resources/static/img/user_profile/" + user.getUserProfileImg());
+            File prevFile = new File(userProfileDir + "/" + user.getUserProfileImg());
             if (prevFile.exists()) {
                 prevFile.delete();
             }
 
-            // 새 이미지 저장 - 나중에 서비스 단으로 옮겨야함 여기서 저장 ㄴ
+            // 새 이미지 저장
             String newFileName = userNumber + "." + getFileExtension(profileImage.getOriginalFilename());
-            File newFile = new File(filePath + "/" + newFileName);
+            File newFile = new File(userProfileDir + "/" + newFileName);
             profileImage.transferTo(newFile);
 
             // 데이터베이스에 새로운 이미지 경로 저장
@@ -303,6 +293,9 @@ public class UserController {
                 .headers(headers)
                 .body(new ResponseMessage(200, "사용자가 참여한 모임 조회 성공", responseMap));
     }
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @Value("${jwt.secret}")
     private String secretKey;
