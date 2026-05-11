@@ -12,6 +12,18 @@ public class TokenParser {
     private String secretKey;
 
 
+    // 유효하지 않은/만료된 토큰이면 null 반환 (optional token 엔드포인트용)
+    public Integer tryExtractUserNumberFromToken(String token) {
+        try {
+            if (token == null || token.equals("null") || token.trim().isEmpty()) {
+                return null;
+            }
+            return extractUserNumberFromToken(token);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     // JWT에서 userNumber를 추출하는 메서드
     public int extractUserNumberFromToken(String token) {
         // "null" 문자열 또는 빈 토큰 방어

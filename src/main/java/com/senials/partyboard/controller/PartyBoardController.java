@@ -63,10 +63,7 @@ public class PartyBoardController {
             @RequestParam int partyBoardNumber
             , @RequestHeader(required = false, value = "Authorization") String token
     ) {
-        Integer userNumber = null;
-        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
-            userNumber = tokenParser.extractUserNumberFromToken(token);
-        }
+        Integer userNumber = tokenParser.tryExtractUserNumberFromToken(token);
 
         List<PartyBoardDTOForCard> recommendedPartyBoards = partyBoardService.getRecommendedPartyBoards(userNumber, partyBoardNumber);
 
@@ -114,10 +111,7 @@ public class PartyBoardController {
             , @RequestHeader(required = false, value = "Authorization") String token
     )
     {
-        Integer userNumber = null;
-        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
-            userNumber = tokenParser.extractUserNumberFromToken(token);
-        }
+        Integer userNumber = tokenParser.tryExtractUserNumberFromToken(token);
 
         /* 더보기 버튼 출력 여부 확인 용 데이터 + 1 */
         List<PartyBoardDTOForCard> partyBoardDTOList = partyBoardService.searchPartyBoard(sortMethod, keyword, cursor, size + 1, isLikedOnly, userNumber);
@@ -160,11 +154,7 @@ public class PartyBoardController {
             , @RequestHeader(required = false, value = "Authorization") String token
     ) {
 
-        Integer userNumber = null;
-        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
-            userNumber = tokenParser.extractUserNumberFromToken(token);
-        }
-
+        Integer userNumber = tokenParser.tryExtractUserNumberFromToken(token);
 
         PartyBoardDTOForDetail partyBoardDTO = partyBoardService.getPartyBoardByNumber(partyBoardNumber);
 

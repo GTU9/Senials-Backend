@@ -78,10 +78,7 @@ public class MeetController {
             ,@RequestHeader(required = false, value = "Authorization") String token
 
     ) {
-        Integer userNumber = null;
-        if(token != null && !token.equals("null") && !token.trim().isEmpty()) {
-            userNumber  = tokenParser.extractUserNumberFromToken(token);
-        }
+        Integer userNumber = tokenParser.tryExtractUserNumberFromToken(token);
 
         // 일정 정보 조회
         List<MeetDTO> meetDTOList = meetService.getMeetsByPartyBoardNumber(userNumber, partyBoardNumber, pageNumber, pageSize);
