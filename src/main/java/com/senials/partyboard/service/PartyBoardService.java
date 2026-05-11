@@ -114,6 +114,7 @@ public class PartyBoardService {
                 firstImageStr = partyBoard.getImages().get(0).getPartyBoardImg();
             }
             partyBoardDTO.setFirstImage(firstImageStr);
+            partyBoardDTO.setMemberCount(partyMemberRepository.countAllByPartyBoard(partyBoard));
             boolean isLiked = user != null && likeRepository.existsByUserAndPartyBoard(user, partyBoard);
             partyBoardDTO.setLiked(isLiked);
             return partyBoardDTO;
