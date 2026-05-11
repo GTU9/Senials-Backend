@@ -2,6 +2,8 @@ package com.senials.partyboardimage.controller;
 
 import com.senials.common.ResponseMessage;
 import com.senials.partyboardimage.dto.FileDTO;
+import com.senials.user.dto.UserCommonDTO;
+import com.senials.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -28,13 +30,15 @@ public class PartyBoardImageController {
     private String uploadPath;
 
     private final ResourceLoader resourceLoader;
-
+    private final UserService userService;
 
     @Autowired
     public PartyBoardImageController(
-            ResourceLoader resourceLoader
+            ResourceLoader resourceLoader,
+            UserService userService
     ) {
         this.resourceLoader = resourceLoader;
+        this.userService = userService;
     }
 
 
@@ -162,27 +166,32 @@ public class PartyBoardImageController {
         }
     }
   
-      //취미 썸네일 이미지 조회
+      // 취미 썸네일 이미지 조회 — uploadPath 기준 (env UPLOAD_PATH로 변경 가능)
     @GetMapping("/img/hobbyboard/{hobbyNumber}")
     public ResponseEntity<Resource> getHobbyImg(@PathVariable String hobbyNumber) {
         try {
-            // 확장자를 동적으로 확인
             String[] extensions = {".png", ".jpg", ".jpeg"};
             Resource resource = null;
 
+            // 1순위: 파일시스템 uploadPath/hobby_board/{n}.ext
             for (String ext : extensions) {
-                resource = resourceLoader.getResource("classpath:static/img/hobby_board/" + hobbyNumber + ext);
-                if (resource.exists()) {
-                    break; // 첫 번째로 발견된 파일 반환
+                resource = resourceLoader.getResource("file:" + uploadPath + "/hobby_board/" + hobbyNumber + ext);
+                if (resource.exists()) break;
+            }
+
+            // 2순위: classpath 패키지 내 기본 이미지 (fallback)
+            if (resource == null || !resource.exists()) {
+                for (String ext : extensions) {
+                    resource = resourceLoader.getResource("classpath:static/img/hobby_board/" + hobbyNumber + ext);
+                    if (resource.exists()) break;
                 }
             }
 
             if (resource != null && resource.exists() && resource.isReadable()) {
-                String contentType = "image/png"; // 기본 MIME 타입 설정
+                String contentType = "image/png";
                 if (resource.getFilename().endsWith(".jpg") || resource.getFilename().endsWith(".jpeg")) {
                     contentType = "image/jpeg";
                 }
-
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType(contentType))
                         .body(resource);
@@ -193,6 +202,29 @@ public class PartyBoardImageController {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+    }
+
+    // 사용자 프로필 이미지 조회 — uploadPath 기준 (env UPLOAD_PATH로 변경 가능)
+    @GetMapping("/img/userProfile/{userNumber}")
+    public ResponseEntity<Resource> getUserProfileImg(@PathVariable int userNumber) {
+        try {
+            UserCommonDTO foundUser = userService.getUserByNumber(userNumber);
+            Resource resource = resourceLoader.getResource(
+                    "file:" + uploadPath + "/user_profile/" + foundUser.getUserProfileImg());
+
+            if (resource.exists()) {
+                String contentType = "image/png";
+                if (resource.getFilename().endsWith(".jpg") || resource.getFilename().endsWith(".jpeg")) {
+                    contentType = "image/jpeg";
+                }
+                return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(resource);
+            }
+        } catch (Exception ignored) {}
+
+        // 이미지 없거나 유저 없으면 기본 프로필 반환
+        Resource defaultResource = resourceLoader.getResource(
+                "classpath:static/img/user_profile/defaultProfile.png");
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(defaultResource);
     }
 
 }
