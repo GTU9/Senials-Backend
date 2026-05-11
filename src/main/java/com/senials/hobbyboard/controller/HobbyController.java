@@ -55,7 +55,7 @@ public class HobbyController {
     //평균 평점 기준, 리뷰 특정 개수 이상 Top3 출력
     @GetMapping("/hobby-board/top3")
     public ResponseEntity<ResponseMessage> hobbySortByRating(
-            @RequestParam(required = false, defaultValue = "1") Integer minReviewCnt
+            @RequestParam(required = false, defaultValue = "3") Integer minReviewCnt
             , @RequestParam(required = false, defaultValue = "3") Integer size
     ){
 

@@ -84,7 +84,7 @@ public class HobbyService {
         hobbyDTOList = hobbyDTOList.stream()
                 .filter(hobbyDTO -> hobbyDTO.getReviewCount() >= minimumReviewCount)
                 .sorted(Comparator.comparingDouble(HobbyDTO::getRating).reversed()
-                        .thenComparingInt(HobbyDTO::getReviewCount).reversed()
+                        .thenComparing(Comparator.comparingInt(HobbyDTO::getReviewCount).reversed())
                         .thenComparingInt(HobbyDTO::getHobbyNumber))
                 .limit(limit)
                 .collect(Collectors.toList());

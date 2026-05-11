@@ -34,7 +34,7 @@ public class HobbyReviewService {
             HobbyReviewDTO dto = hobbyReviewMapper.toHobbyReviewDTO(hobbyReview);
             dto.setHobbyNumber(hobbyReview.getHobby().getHobbyNumber());
             dto.setUserNumber(hobbyReview.getUser().getUserNumber());
-            dto.setUserName(hobbyReview.getUser().getUserName());
+            dto.setUserName(hobbyReview.getUser().getUserNickname());
             return dto;
         }).toList();
         return hobbyReviewDTOList;
@@ -65,7 +65,7 @@ public class HobbyReviewService {
         HobbyReviewDTO hobbyReviewDTO = hobbyReviewMapper.toHobbyReviewDTO(hobbyReview);
         hobbyReviewDTO.setHobbyNumber(hobby.getHobbyNumber());
         hobbyReviewDTO.setUserNumber(user.getUserNumber());
-        hobbyReviewDTO.setUserName(hobbyReview.getUser().getUserName());
+        hobbyReviewDTO.setUserName(hobbyReview.getUser().getUserNickname());
 
         return hobbyReviewDTO;
     }
