@@ -15,8 +15,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,17 +35,14 @@ public class UserController {
     private final HttpHeadersFactory httpHeadersFactory;
     private final UserRepository userRepository;
     private UserService userService;
-    private final ResourceLoader resourceLoader;
 
     public UserController(
             TokenParser tokenParser
             , UserService userService
-            , ResourceLoader resourceLoader
-            , HttpHeadersFactory httpHeadersFactory,
-            UserRepository userRepository) {
+            , HttpHeadersFactory httpHeadersFactory
+            , UserRepository userRepository) {
         this.tokenParser = tokenParser;
         this.userService = userService;
-        this.resourceLoader = resourceLoader;
         this.httpHeadersFactory = httpHeadersFactory;
         this.userRepository = userRepository;
     }
@@ -176,35 +171,6 @@ public class UserController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(new ResponseMessage(200, "사용자 프로필 수정 성공", null));
-    }
-
-
-    // 사용자 프로필 출력
-    @GetMapping("/img/userProfile/{userNumber}")
-    public ResponseEntity<Resource> getUserImage(
-            @PathVariable int userNumber
-    ){
-        try{
-            UserCommonDTO foundUser = userService.getUserByNumber(userNumber);
-            String filePath = uploadPath + "/user_profile/" + foundUser.getUserProfileImg();
-            Resource resource = resourceLoader.getResource("file:" + filePath);
-
-            if (resource.exists()){
-                String contentType = "image/png";
-                if(resource.getFilename().endsWith("jpg") || resource.getFilename().endsWith("jpeg")){
-                    contentType = "image/jpeg";
-                }
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType(contentType))
-                        .body(resource);
-            }else {
-                Resource defaultResource = resourceLoader.getResource("classpath:static/img/user_profile/defaultProfile.png");
-                return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(defaultResource);
-            }
-        }catch (Exception e){
-            Resource defaultResource = resourceLoader.getResource("classpath:static/img/user_profile/defaultProfile.png");
-            return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/png")).body(defaultResource);
-        }
     }
 
 
