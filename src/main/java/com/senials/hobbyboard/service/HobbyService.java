@@ -58,6 +58,7 @@ public class HobbyService {
 
         List<HobbyDTO> hobbyDTOList = hobbyList.stream().map(hobby -> {
             HobbyDTO dto=hobbyMapper.toHobbyDTO(hobby);
+            dto.setCategoryName(hobby.getCategory().getCategoryName());
             dto.setRating(hobbyReviewRepository.avgRatingByHobbyNumber(hobby.getHobbyNumber()));
             dto.setReviewCount(hobbyReviewRepository.reviewCountByHobbyNumber(hobby.getHobbyNumber()));
             return dto;
@@ -95,6 +96,7 @@ public class HobbyService {
     public HobbyDTO findById(int hobbyNumber) {
         Hobby hobby = hobbyRepository.findById(hobbyNumber).orElseThrow(() -> new IllegalArgumentException("해당 취미가 존재하지 않습니다: " + hobbyNumber));
         HobbyDTO hobbyDTO = hobbyMapper.toHobbyDTO(hobby);
+        hobbyDTO.setCategoryName(hobby.getCategory().getCategoryName());
         hobbyDTO.setRating(hobbyReviewRepository.avgRatingByHobbyNumber(hobby.getHobbyNumber()));
         hobbyDTO.setReviewCount(hobbyReviewRepository.reviewCountByHobbyNumber(hobby.getHobbyNumber()));
         return hobbyDTO;
@@ -106,6 +108,7 @@ public class HobbyService {
 
         List<HobbyDTO> hobbyDTOList = hobbyList.stream().map(hobby -> {
             HobbyDTO dto=hobbyMapper.toHobbyDTO(hobby);
+            dto.setCategoryName(hobby.getCategory().getCategoryName());
             dto.setRating(hobbyReviewRepository.avgRatingByHobbyNumber(hobby.getHobbyNumber()));
             dto.setReviewCount(hobbyReviewRepository.reviewCountByHobbyNumber(hobby.getHobbyNumber()));
             return dto;
