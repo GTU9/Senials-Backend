@@ -122,7 +122,7 @@ public class PartyBoardImageController {
             @PathVariable Integer categoryNumber
     ) {
 
-        Resource resource = resourceLoader.getResource(imgPath + "/category/" + categoryNumber + "/thumbnail/");
+        Resource resource = resourceLoader.getResource("file:" + uploadPath + "/category/" + categoryNumber + "/thumbnail/");
         Resource foundResource = null;
 
         try {

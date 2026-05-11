@@ -110,9 +110,8 @@ public class PartyBoardService {
         List<PartyBoardDTOForCard> partyBoardDTOList = partyBoardList.stream().map(partyBoard -> {
             PartyBoardDTOForCard partyBoardDTO = partyBoardMapper.toPartyBoardDTOForCard(partyBoard);
             String firstImageStr = null;
-            PartyBoardImage firstImage = partyBoard.getImages().get(0);
-            if(firstImage != null) {
-                firstImageStr = firstImage.getPartyBoardImg();
+            if(!partyBoard.getImages().isEmpty()) {
+                firstImageStr = partyBoard.getImages().get(0).getPartyBoardImg();
             }
             partyBoardDTO.setFirstImage(firstImageStr);
             boolean isLiked = user != null && likeRepository.existsByUserAndPartyBoard(user, partyBoard);
